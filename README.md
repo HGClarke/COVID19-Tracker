@@ -1,6 +1,6 @@
 # COVID-19 Tracker
 
-Goal of this project is to display graphical data on the spread of the coronavirus worldwide. Data will be retrieved from 
+Goal of this project is to display graphical data on the spread of the coronavirus worldwide.
 
 ## Goals and Todos: 
 
