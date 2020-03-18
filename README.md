@@ -24,7 +24,7 @@ Goal of this project is to display graphical data on the spread of the coronavir
 
 * [ ] Learn cron scheduler
 
-* [ ] Map View, Add markers where cases are confirmed for users to see
+* [x] Map View, Add markers where cases are confirmed for users to see
 
 * [ ] Possibly cache data
 
