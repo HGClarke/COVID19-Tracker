@@ -1,17 +1,13 @@
 import 'dart:async';
 
-import 'package:covid19_tracker/models/map_marker.dart';
+import 'package:covid19_tracker/models/data_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import '../constants.dart';
+import 'package:provider/provider.dart';
 
 class COVIDMap extends StatefulWidget {
-  final String url;
-  final data;
-  COVIDMap({this.url = kConfirmedURL, @required this.data});
   @override
   _COVIDMapState createState() => _COVIDMapState();
 }
@@ -19,7 +15,6 @@ class COVIDMap extends StatefulWidget {
 class _COVIDMapState extends State<COVIDMap>
     with AutomaticKeepAliveClientMixin {
   Completer<GoogleMapController> _controller = Completer();
-  static List<Marker> allMarkers = [];
   GoogleMap _map;
   @override
   bool get wantKeepAlive => true;
@@ -27,11 +22,11 @@ class _COVIDMapState extends State<COVIDMap>
   @override
   void initState() {
     super.initState();
-    getMarkers(widget.data);
   }
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<COVIDDataProvider>(context);
     if (_map == null) {
       _map = GoogleMap(
         gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
@@ -48,30 +43,9 @@ class _COVIDMapState extends State<COVIDMap>
           _controller.complete(controller);
           updateKeepAlive();
         },
-        markers: Set.from(allMarkers),
+        markers: Set.from(provider.markers),
       );
     }
     return _map;
-  }
-
-  static void getMarkers(data) async {
-    int countryIndex = 1;
-    int latIndex = 2;
-    int lonIndex = 3;
-    List<MapMarker> markers = [];
-    for (int i = 1; i < data.length; i++) {
-      MapMarker marker = MapMarker(data[i][countryIndex],
-          data[i][latIndex].toDouble(), data[i][lonIndex].toDouble());
-
-      markers.add(marker);
-    }
-    allMarkers = markers.map<Marker>((marker) {
-      return Marker(
-          markerId: MarkerId(marker.id),
-          position: LatLng(marker.lat, marker.lon),
-          draggable: false);
-    }).toList();
-
-    // return markers;
   }
 }

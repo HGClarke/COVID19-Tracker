@@ -1,21 +1,15 @@
 import 'package:covid19_tracker/models/covid_data.dart';
+import 'package:covid19_tracker/models/data_provider.dart';
 import 'package:covid19_tracker/pages/covid19_map.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:provider/provider.dart';
 
 class StatsPage extends StatefulWidget {
-  final String title;
-  final List<List<dynamic>> data;
-  StatsPage(this.title, this.data);
-
+  final title;
+  StatsPage(this.title);
   @override
   _StatsPageState createState() => _StatsPageState();
-}
-
-class ClicksPerYear {
-  final String year;
-  final int clicks;
-  ClicksPerYear(this.year, this.clicks);
 }
 
 class _StatsPageState extends State<StatsPage>
@@ -28,30 +22,10 @@ class _StatsPageState extends State<StatsPage>
     _tabController = new TabController(length: 2, vsync: this);
   }
 
-  List<ChartData> getDataPoints() {
-    int columns = widget.data[0].length - 1;
-    final numericalData = {};
-
-    for (int i = 1; i < widget.data.length; i++) {
-      for (int j = 4; j <= columns; j++) {
-        String date = widget.data[0][j];
-        numericalData[date] =
-            (numericalData[date] ?? 0) + widget.data[i][j].toInt();
-      }
-    }
-    List<ChartData> dataPoints = [];
-    for (var entry in numericalData.entries) {
-      ChartData dataPoint =
-          ChartData(entry.key.toString(), entry.value.toInt());
-
-      dataPoints.add(dataPoint);
-    }
-    return dataPoints;
-  }
-
   @override
   Widget build(BuildContext context) {
-    var data = getDataPoints();
+    final provider = Provider.of<COVIDDataProvider>(context);
+    var data = provider.dataPoints;
 
     var series = [
       charts.Series(
@@ -113,7 +87,7 @@ class _StatsPageState extends State<StatsPage>
         controller: _tabController,
         children: [
           chartWidget,
-          COVIDMap(data: widget.data),
+          COVIDMap(),
         ],
       ),
     );
