@@ -10,17 +10,19 @@ Goal of this project is to display graphical data on the spread of the coronavir
 
 * [x] Find graph package to show data  ([Flutter Charts](https://pub.dev/packages/charts_flutter))
 
-* [ ] Build objects to store data 
+* [x] Build objects to store data 
 
-* [ ] Show data based on data stored in the objects
+* [x] Show Graphical Data;
 
-* [ ] Learn how to use Flutter Tab Bars
+* [ ] Learn and implement Provider instead of passing csv data to many constructors
+
+* [x] Learn how to use Flutter Tab Bars
 
 * [ ] Flutter Push Notifications, Alert users daily of confirmed cases, recovered cases and deaths
 
 * [ ] Firebase backend for push notifications
 
-* [ ] Device registrations for push notifications
+* [x] Device registrations for push notifications
 
 * [ ] Learn cron scheduler
 

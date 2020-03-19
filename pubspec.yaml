@@ -22,7 +22,9 @@ dependencies:
   csv: ^4.0.3
   http: ^0.12.0+4
   google_maps_flutter: ^0.5.24+1
-  uuid: ^2.0.4
+  uuid: ^2.0.4 
+  charts_flutter: ^0.9.0
+  provider: ^4.0.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

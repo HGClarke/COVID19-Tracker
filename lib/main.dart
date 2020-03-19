@@ -1,9 +1,10 @@
-import 'package:covid19_tracker/models/map_marker.dart';
+import 'package:covid19_tracker/models/covid_data.dart';
+import 'package:covid19_tracker/pages/covid19_map.dart';
+import 'package:covid19_tracker/pages/data_page.dart';
 import 'package:covid19_tracker/services/networking.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'dart:async';
+
 import 'constants.dart';
 
 void main() => runApp(MyApp());
@@ -25,14 +26,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<List<dynamic>> myData = [];
-  Completer<GoogleMapController> _controller = Completer();
-  List<Marker> allMarkers = [];
+  COVID19Data covidData = COVID19Data();
 
   @override
   void initState() {
     super.initState();
-    getMarkers();
+    getCovidStats();
   }
 
   @override
@@ -43,45 +42,113 @@ class _HomePageState extends State<HomePage> {
           'COVID-19 Tracker',
         ),
       ),
-      body: GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: CameraPosition(
-          target: LatLng(40.7128, -74.0060),
-          zoom: 12,
-        ),
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-        markers: Set.from(allMarkers),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.ac_unit),
-        onPressed: () {},
+      body: SafeArea(
+        child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            // color: Colors.white,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: ListView(
+              children: <Widget>[
+                ListTile(
+                  onTap: () async {
+                    final data = await parseCSV(kConfirmedURL);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => StatsPage('Confirmed Data', data),
+                      ),
+                    );
+                  },
+                  title: Text(
+                    'Confirmed Cases: ${covidData.confirmed}',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20,
+                  ),
+                ),
+                Divider(
+                  color: Colors.white,
+                ),
+                ListTile(
+                  onTap: () async {
+                    final data = await parseCSV(kConfirmedURL);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => COVIDMap(data: data),
+                      ),
+                    );
+                  },
+                  title: Text(
+                    'Recovered: ${covidData.recovered}',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20,
+                  ),
+                ),
+                Divider(
+                  color: Colors.white,
+                ),
+                ListTile(
+                  onTap: () async {
+                    final data = await parseCSV(kConfirmedURL);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => COVIDMap(data: data),
+                      ),
+                    );
+                  },
+                  title: Text(
+                    'Deaths: ${covidData.deaths}',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20,
+                  ),
+                ),
+                Divider(
+                  color: Colors.white,
+                ),
+              ],
+            )),
       ),
     );
   }
 
-  void getMarkers() async {
-    final data = await parseCSV(kConfirmedURL);
-
-    int countryIndex = 1;
-    int latIndex = 2;
-    int lonIndex = 3;
-    List<MapMarker> markers = [];
-    for (int i = 1; i < data.length; i++) {
-      MapMarker marker = MapMarker(data[i][countryIndex],
-          data[i][latIndex].toDouble(), data[i][lonIndex].toDouble());
-      markers.add(marker);
+//             )
+  Future<List<List<dynamic>>> parseCSV(url) async {
+    final networkService = NetworkService(url);
+    final response = await networkService.fetchData();
+    List<List<dynamic>> data = [];
+    if (response.statusCode == 200) {
+      final parsedData = CsvToListConverter(eol: '\n').convert(response.body);
+      data = parsedData;
+      // print(calculateSum(parsedData));
+      // getMarkers(parsedData);
     }
+    return data;
+  }
+
+  getCovidStats() async {
+    final confirmedData = await parseCSV(kConfirmedURL);
+    final deathsData = await parseCSV(kDeathsURL);
+    final recoveredData = await parseCSV(kRecoveredURL);
+    int totalConfirmedCases = calculateSum(confirmedData);
+    int totalDeaths = calculateSum(deathsData);
+    int totalRecovered = calculateSum(recoveredData);
     setState(() {
-      allMarkers = markers.map<Marker>((marker) {
-        return Marker(
-            markerId: MarkerId(marker.markerID),
-            position: LatLng(marker.lat, marker.lon),
-            draggable: false);
-      }).toList();
+      covidData = COVID19Data(
+          deaths: totalDeaths,
+          confirmed: totalConfirmedCases,
+          recovered: totalRecovered);
     });
-    // return markers;
   }
 
   int calculateSum(data) {
@@ -92,18 +159,5 @@ class _HomePageState extends State<HomePage> {
       sum += data[i][columns - 1];
     }
     return sum;
-  }
-
-  Future<List<List<dynamic>>> parseCSV(url) async {
-    final networkService = NetworkService(url);
-    final response = await networkService.fetchData();
-    List<List<dynamic>> data = [];
-    if (response.statusCode == 200) {
-      final parsedData = CsvToListConverter().convert(response.body);
-      data = parsedData;
-      // print(calculateSum(parsedData));
-      // getMarkers(parsedData);
-    }
-    return data;
   }
 }
