@@ -14,7 +14,7 @@ Goal of this project is to display graphical data on the spread of the coronavir
 
 * [x] Show Graphical Data;
 
-* [ ] Learn and implement Provider instead of passing csv data to many constructors
+* [x] Learn and implement Provider instead of passing csv data to many constructors
 
 * [x] Learn how to use Flutter Tab Bars
 
@@ -30,4 +30,7 @@ Goal of this project is to display graphical data on the spread of the coronavir
 
 * [ ] Possibly cache data
 
+* [ ] Redesign Home Screen
+* [ ] Find API for COVID News feed
+* [ ] Implement new api
 * [ ] Grid View of data, allows for searching

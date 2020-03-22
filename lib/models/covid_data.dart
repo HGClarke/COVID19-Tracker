@@ -1,40 +1,13 @@
+import 'package:covid19_tracker/models/stats.dart';
+
 class COVID19Data {
-  final int confirmed;
-  final int recovered;
-  final int deaths;
+  String updatedDateTime;
+  Stats stats;
 
-  COVID19Data({this.confirmed = 0, this.recovered = 0, this.deaths = 0});
-}
+  COVID19Data({this.updatedDateTime, this.stats});
 
-abstract class COVIDData {
-  String date;
-  int total;
-  COVIDData() {
-    this.total = 0;
-    this.date = DateTime.now().toString();
+  COVID19Data.fromJson(Map<String, dynamic> json) {
+    updatedDateTime = json['updatedDateTime'];
+    stats = json['stats'] = Stats.fromJson(json['stats']);
   }
-  COVIDData.withArgumentConstructor(String date, int total) {
-    this.date = date;
-    this.total = total;
-  }
-}
-
-class ChartData extends COVIDData {
-  ChartData(String date, int total)
-      : super.withArgumentConstructor(date, total);
-}
-
-class COVIDRecoveryData extends COVIDData {
-  COVIDRecoveryData(String date, int total)
-      : super.withArgumentConstructor(date, total);
-}
-
-class COVIDDeathsData extends COVIDData {
-  COVIDDeathsData(String date, int total)
-      : super.withArgumentConstructor(date, total);
-}
-
-class COVIDConfirmedData extends COVIDData {
-  COVIDConfirmedData(String date, int total)
-      : super.withArgumentConstructor(date, total);
 }

@@ -24,48 +24,45 @@ class _StatsPageState extends State<StatsPage>
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<COVIDDataProvider>(context);
-    var data = provider.dataPoints;
+    // var series = [
+    //   charts.Series(
+    //     domainFn: (ChartData data, _) => data.date,
+    //     measureFn: (ChartData data, _) => data.total,
+    //     colorFn: (_, __) =>
+    //         charts.ColorUtil.fromDartColor(Theme.of(context).accentColor),
+    //     id: 'Clicks',
+    //     data: data,
+    //   ),
+    // ];
 
-    var series = [
-      charts.Series(
-        domainFn: (ChartData data, _) => data.date,
-        measureFn: (ChartData data, _) => data.total,
-        colorFn: (_, __) =>
-            charts.ColorUtil.fromDartColor(Theme.of(context).accentColor),
-        id: 'Clicks',
-        data: data,
-      ),
-    ];
+    // var chart = charts.BarChart(
+    //   series,
+    //   animate: true,
+    //   domainAxis: charts.OrdinalAxisSpec(
+    //     renderSpec: charts.NoneRenderSpec(),
+    //   ),
+    //   primaryMeasureAxis: charts.NumericAxisSpec(
+    //     renderSpec: charts.GridlineRendererSpec(
+    //       labelStyle: charts.TextStyleSpec(
+    //         fontSize: 15,
+    //         color:
+    //             charts.ColorUtil.fromDartColor(Theme.of(context).accentColor),
+    //       ),
+    //       lineStyle: charts.LineStyleSpec(
+    //         color: charts.MaterialPalette.white,
+    //       ),
+    //     ),
+    //   ),
+    // );
 
-    var chart = charts.BarChart(
-      series,
-      animate: true,
-      domainAxis: charts.OrdinalAxisSpec(
-        renderSpec: charts.NoneRenderSpec(),
-      ),
-      primaryMeasureAxis: charts.NumericAxisSpec(
-        renderSpec: charts.GridlineRendererSpec(
-          labelStyle: charts.TextStyleSpec(
-            fontSize: 15,
-            color:
-                charts.ColorUtil.fromDartColor(Theme.of(context).accentColor),
-          ),
-          lineStyle: charts.LineStyleSpec(
-            color: charts.MaterialPalette.white,
-          ),
-        ),
-      ),
-    );
-
-    var chartWidget = Padding(
-      padding: EdgeInsets.all(32.0),
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: chart,
-      ),
-    );
+    // var chartWidget = Padding(
+    //   padding: EdgeInsets.all(32.0),
+    //   child: SizedBox(
+    //     height: MediaQuery.of(context).size.height,
+    //     width: MediaQuery.of(context).size.width,
+    //     child: chart,
+    //   ),
+    // );
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -86,7 +83,9 @@ class _StatsPageState extends State<StatsPage>
       body: TabBarView(
         controller: _tabController,
         children: [
-          chartWidget,
+          Container(
+            color: Colors.white,
+          ),
           COVIDMap(),
         ],
       ),

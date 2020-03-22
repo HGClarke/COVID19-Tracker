@@ -1,9 +1,9 @@
-import 'package:covid19_tracker/models/covid_data.dart';
 import 'package:covid19_tracker/pages/data_page.dart';
+import 'package:covid19_tracker/widgets/pie_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'models/data_provider.dart';
+import 'widgets/data_card.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,110 +21,60 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  COVID19Data covidData = COVID19Data();
-
-  @override
-  void initState() {
-    super.initState();
-    // getCovidStats();
-  }
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<COVIDDataProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'COVID-19 Tracker',
-        ),
-      ),
       body: SafeArea(
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          margin: const EdgeInsets.only(
+            left: 10,
+            right: 10,
+            bottom: 40,
+          ),
           // color: Colors.white,
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: ListView(
+          child: Column(
             children: <Widget>[
-              ListTile(
-                onTap: () {
-                  provider.createDataPoints(provider.confirmedData);
-                  provider.createMarkers(provider.confirmedData);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => StatsPage('Confirmed Cases')));
-                },
-                title: Text(
-                  'Confirmed Cases: ${provider.stats.confirmed}',
-                  style: TextStyle(fontSize: 20),
-                ),
-                trailing: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 20,
-                ),
+              COVIDPieChart(),
+              SizedBox(height: 10),
+              DataCard(
+                totalCases: provider.stats.stats.totalConfirmedCases,
+                newCases: provider.stats.stats.newlyConfirmedCases,
+                topLabel: 'Total Confirmed',
+                bottomLabel: "Newly Confirmed",
               ),
-              Divider(color: Colors.white),
-              ListTile(
-                onTap: () {
-                  provider.createDataPoints(provider.recoveredData);
-                  provider.createMarkers(provider.recoveredData);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => StatsPage('Recovery Data')));
-                },
-                title: Text(
-                  'Recovered: ${provider.stats.recovered}',
-                  style: TextStyle(fontSize: 20),
-                ),
-                trailing: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 20,
-                ),
+              DataCard(
+                totalCases: provider.stats.stats.totalRecoveredCases,
+                newCases: provider.stats.stats.newlyRecoveredCases,
+                topLabel: 'Total Recovered',
+                bottomLabel: "Newly Recovered",
               ),
-              Divider(
-                color: Colors.white,
-              ),
-              ListTile(
-                onTap: () {
-                  provider.createDataPoints(provider.deathsData);
-                  provider.createMarkers(provider.deathsData);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => StatsPage('Deaths')));
-                },
-                title: Text(
-                  'Deaths: ${provider.stats.deaths}',
-                  style: TextStyle(fontSize: 20),
-                ),
-                trailing: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 20,
-                ),
-              ),
-              Divider(
-                color: Colors.white,
+              DataCard(
+                totalCases: provider.stats.stats.totalDeaths,
+                newCases: provider.stats.stats.newDeaths,
+                topLabel: 'Total Deaths',
+                bottomLabel: "New Deaths",
               ),
             ],
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(
+          0xFFf0134d,
+        ),
+        onPressed: () {
+          Provider.of<COVIDDataProvider>(context, listen: false)
+              .getCovidStats();
+        },
+        child: Icon(
+          Icons.autorenew,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }
-
-// class COVIDStatsTile extends StatelessWidget {
-//   final int total;
-//   final String text;
-//   COVIDStatsTile(this.text, this.total);
-//   @override
-//   Widget build(BuildContext context) {
-//     return
-//   }
-// }

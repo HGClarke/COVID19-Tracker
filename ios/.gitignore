@@ -54,3 +54,5 @@ Runner/GeneratedPluginRegistrant.*
 .settings/
 .vscode/
 
+lib/models/api_service.dart
+

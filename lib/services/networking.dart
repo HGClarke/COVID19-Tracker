@@ -1,3 +1,4 @@
+import 'package:covid19_tracker/models/api_service.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkService {
@@ -6,6 +7,6 @@ class NetworkService {
   NetworkService(this.url);
 
   Future<http.Response> fetchData() async {
-    return http.get(url);
+    return http.get(url, headers: APIService.headers);
   }
 }
