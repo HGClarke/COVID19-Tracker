@@ -1,5 +1,4 @@
 import 'package:covid19_tracker/models/country_card_data.dart';
-import 'package:covid19_tracker/utilities/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CountryInfoCard extends StatelessWidget {

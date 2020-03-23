@@ -1,4 +1,5 @@
 import 'package:covid19_tracker/models/chart_data.dart';
+import 'package:covid19_tracker/utilities/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -37,12 +38,12 @@ class COVIDPieChart extends StatelessWidget {
           labelAccessorFn: (ChartData chartData, _) => '${chartData.count}'),
     ];
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 30),
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height / 2,
       child: charts.PieChart(
         series,
-        animate: true,
+        animate: false,
         behaviors: [
           charts.DatumLegend(
             entryTextStyle: charts.TextStyleSpec(
@@ -55,9 +56,22 @@ class COVIDPieChart extends StatelessWidget {
             // desiredMaxRows: 2,
           )
         ],
-        defaultRenderer: charts.ArcRendererConfig(
-          arcWidth: 80,
-        ),
+        defaultRenderer: charts.ArcRendererConfig(arcRendererDecorators: [
+          charts.ArcLabelDecorator(
+            labelPosition: charts.ArcLabelPosition.auto,
+            insideLabelStyleSpec: charts.TextStyleSpec(
+              fontSize: 20,
+              color: charts.ColorUtil.fromDartColor(AppColors.eggWhite),
+            ),
+            outsideLabelStyleSpec: charts.TextStyleSpec(
+              fontSize: 20,
+              color: charts.ColorUtil.fromDartColor(AppColors.eggWhite),
+            ),
+            leaderLineStyleSpec: charts.ArcLabelLeaderLineStyleSpec(
+                color: charts.ColorUtil.fromDartColor(AppColors.eggWhite),
+                length: 20),
+          )
+        ]),
       ),
     );
   }
