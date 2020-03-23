@@ -1,55 +1,82 @@
 import 'dart:convert';
-
 import 'package:covid19_tracker/models/api_service.dart';
+import 'package:covid19_tracker/models/chart_data.dart';
 import 'package:covid19_tracker/models/covid_data.dart';
 import 'package:covid19_tracker/services/networking.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import 'map_marker.dart';
 
 class COVIDDataProvider extends ChangeNotifier {
   COVIDDataProvider() {
-    // _data = COVID19Data();
-    getCovidStats();
+    updateData();
   }
 
   COVID19Data _data;
   // List<ChartData> _dataPoints = [];
-  List<Marker> _markers = [];
 
   // List<ChartData> get dataPoints => _dataPoints;
   COVID19Data get stats => _data;
-  List<Marker> get markers => _markers;
+  List<ChartData> get confirmedHistory => _confirmedCaseHistory;
+  List<ChartData> get deathsHistory => _deathsHistory;
+  List<ChartData> get recoveredHistory => _recoveredHistory;
 
-  void getCovidStats() async {
+  List<ChartData> _confirmedCaseHistory;
+  List<ChartData> _deathsHistory;
+  List<ChartData> _recoveredHistory;
+  Future<COVID19Data> getCovidStats() async {
     final networkService = NetworkService(APIService.globalDataURL);
-    final response = await networkService.fetchData();
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      _data = COVID19Data.fromJson(jsonData);
+    var data;
+    try {
+      final response = await networkService.fetchData();
+      data = COVID19Data.fromJson(
+        jsonDecode(
+          response.body,
+        ),
+      );
+    } catch (e) {
+      print(e);
     }
+
+    return data;
+  }
+
+  void updateData() async {
+    _data = await getCovidStats();
+    mapConfirmedHistory();
+    mapRecoveredHistory();
+    mapDeathsHistory();
     notifyListeners();
   }
 
-  void createMarkers() {
-    final breakdowns = _data.stats.breakdowns;
-    List<MapMarker> markers = [];
-    for (var breakdown in breakdowns) {
-      MapMarker marker = MapMarker(breakdown.location.countryOrRegion,
-          breakdown.location.lat, breakdown.location.long);
-      markers.add(marker);
-    }
+  void mapConfirmedHistory() {
+    _confirmedCaseHistory = _data.stats.history
+        .map<ChartData>(
+          (v) => ChartData(
+            label: v.date,
+            count: v.confirmed,
+          ),
+        )
+        .toList();
+  }
 
-    _markers = markers.map<Marker>((marker) {
-      return Marker(
-          markerId: MarkerId(marker.id),
-          position: LatLng(marker.lat, marker.lon),
-          draggable: false,
-          onTap: () {
-            print(marker.country);
-          });
-    }).toList();
-    notifyListeners();
+  void mapDeathsHistory() {
+    _deathsHistory = _data.stats.history
+        .map(
+          (v) => ChartData(
+            label: v.date,
+            count: v.deaths,
+          ),
+        )
+        .toList();
+  }
+
+  void mapRecoveredHistory() {
+    _recoveredHistory = _data.stats.history
+        .map(
+          (v) => ChartData(
+            label: v.date,
+            count: v.recovered,
+          ),
+        )
+        .toList();
   }
 }

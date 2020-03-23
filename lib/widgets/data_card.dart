@@ -1,25 +1,30 @@
-import 'package:covid19_tracker/models/breakdowns.dart';
+import 'package:covid19_tracker/models/chart_data.dart';
+import 'package:covid19_tracker/models/data_page_args.dart';
 import 'package:flutter/material.dart';
 
 class DataCard extends StatelessWidget {
-  int totalCases;
-  int newCases;
-  String topLabel;
-  String bottomLabel;
-  List<Breakdowns> breakdowns = [];
+  final int totalCases;
+  final int newCases;
+  final String topLabel;
+  final String bottomLabel;
+  final List<ChartData> history;
   DataCard({
     this.totalCases = 0,
     this.newCases = 0,
     @required this.topLabel,
     @required this.bottomLabel,
-    this.breakdowns,
+    @required this.history,
   });
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          print('Tapped');
+          Navigator.pushNamed(
+            context,
+            '/data-page',
+            arguments: DataPageArguments(history),
+          );
         },
         child: Card(
           child: Container(

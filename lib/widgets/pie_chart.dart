@@ -11,9 +11,10 @@ class COVIDPieChart extends StatelessWidget {
     final covidStats = provider.stats;
     final dataPoints = [
       ChartData(
-          label: "Confirmed",
-          count: covidStats.stats.totalConfirmedCases,
-          color: Color(0xFFf0134d)),
+        label: "Confirmed",
+        count: covidStats.stats.totalConfirmedCases,
+        color: Color(0xFFf0134d),
+      ),
       ChartData(
         label: "Recovered",
         count: covidStats.stats.totalRecoveredCases,

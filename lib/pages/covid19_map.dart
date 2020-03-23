@@ -49,7 +49,6 @@ class _COVIDMapState extends State<COVIDMap>
         );
       },
     ).toList();
-    setState(() {});
     if (_map == null) {
       _map = GoogleMap(
         gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
