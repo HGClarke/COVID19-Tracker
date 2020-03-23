@@ -1,4 +1,4 @@
-import 'package:covid19_tracker/models/api_service.dart';
+import 'package:covid19_tracker/utilities/api_service.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkService {

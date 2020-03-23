@@ -1,4 +1,5 @@
 import 'package:covid19_tracker/models/covid_data.dart';
+import 'package:covid19_tracker/models/covid_stats_choice.dart';
 import 'package:covid19_tracker/models/data_provider.dart';
 import 'package:covid19_tracker/widgets/data_card.dart';
 import 'package:covid19_tracker/widgets/pie_chart.dart';
@@ -6,12 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<COVIDDataProvider>(context);
@@ -27,40 +23,11 @@ class _HomePageState extends State<HomePage> {
           // color: Colors.white,
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: FutureBuilder<COVID19Data>(
-            future: provider.getCovidStats(),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.done:
-                  final stats = snapshot.data.stats;
-                  return Column(
-                    children: <Widget>[
-                      COVIDPieChart(),
-                      SizedBox(height: 10),
-                      DataCard(
-                        totalCases: stats.totalConfirmedCases,
-                        newCases: stats.newlyConfirmedCases,
-                        topLabel: 'Total Confirmed',
-                        bottomLabel: "Newly Confirmed",
-                        history: provider.confirmedHistory,
-                      ),
-                      DataCard(
-                        totalCases: stats.totalRecoveredCases,
-                        newCases: stats.newlyRecoveredCases,
-                        topLabel: 'Total Recovered',
-                        bottomLabel: "Newly Recovered",
-                        history: provider.recoveredHistory,
-                      ),
-                      DataCard(
-                        totalCases: stats.totalDeaths,
-                        newCases: stats.newDeaths,
-                        topLabel: 'Total Deaths',
-                        bottomLabel: "New Deaths",
-                        history: provider.deathsHistory,
-                      ),
-                    ],
-                  );
-                case ConnectionState.waiting:
+          child: FutureProvider<COVID19Data>(
+            create: (_) => provider.getCovidStats(),
+            child: Consumer<COVID19Data>(
+              builder: (context, data, child) {
+                if (data == null) {
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -81,25 +48,40 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   );
-                  break;
-                case ConnectionState.none:
-                  return Center(
-                    child: Text(
-                      'No connection found. Please try again.',
-                    ),
-                  );
-                default:
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        'An error has occured. Please check your connection',
+                } else {
+                  return Column(
+                    children: [
+                      COVIDPieChart(data.stats),
+                      SizedBox(height: 10),
+                      DataCard(
+                        totalCases: data.stats.totalConfirmedCases,
+                        newCases: data.stats.newlyConfirmedCases,
+                        topLabel: 'Total Confirmed',
+                        bottomLabel: "Newly Confirmed",
+                        history: provider.confirmedHistory,
+                        choice: COVIDStatChoice.confirmed,
                       ),
-                    );
-                  } else {
-                    return Container();
-                  }
-              }
-            },
+                      DataCard(
+                        totalCases: data.stats.totalRecoveredCases,
+                        newCases: data.stats.newlyRecoveredCases,
+                        topLabel: 'Total Recovered',
+                        bottomLabel: "Newly Recovered",
+                        history: provider.recoveredHistory,
+                        choice: COVIDStatChoice.recovered,
+                      ),
+                      DataCard(
+                        totalCases: data.stats.totalDeaths,
+                        newCases: data.stats.newDeaths,
+                        topLabel: 'Total Deaths',
+                        bottomLabel: "New Deaths",
+                        history: provider.deathsHistory,
+                        choice: COVIDStatChoice.deaths,
+                      ),
+                    ],
+                  );
+                }
+              },
+            ),
           ),
         ),
       ),
@@ -108,8 +90,7 @@ class _HomePageState extends State<HomePage> {
           0xFFf0134d,
         ),
         onPressed: () {
-          Provider.of<COVIDDataProvider>(context, listen: false)
-              .getCovidStats();
+          Provider.of<COVIDDataProvider>(context, listen: false).updateData();
           // Navigator.pu
         },
         child: Icon(

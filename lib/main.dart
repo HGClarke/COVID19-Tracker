@@ -1,9 +1,10 @@
-import 'package:covid19_tracker/pages/data_page.dart';
+import 'package:covid19_tracker/pages/details_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'models/data_provider.dart';
 import 'pages/home_page.dart';
+import 'utilities/page_routes.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,10 +16,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData.dark(),
-        initialRoute: '/',
+        initialRoute: PageRoutes.home,
         routes: {
-          '/': (context) => HomePage(),
-          '/data-page': (context) => StatsPage(),
+          PageRoutes.home: (context) => HomePage(),
+          PageRoutes.detailsPage: (context) => DetailsPage(),
         },
       ),
     );

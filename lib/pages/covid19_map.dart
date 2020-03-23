@@ -18,6 +18,7 @@ class _COVIDMapState extends State<COVIDMap>
   Completer<GoogleMapController> _controller = Completer();
   GoogleMap _map;
   List<Marker> markers = [];
+  Future data;
   @override
   bool get wantKeepAlive => true;
 
@@ -28,6 +29,7 @@ class _COVIDMapState extends State<COVIDMap>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final breakdowns =
         Provider.of<COVIDDataProvider>(context).stats.stats.breakdowns;
     final filteredList = breakdowns

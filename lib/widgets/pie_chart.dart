@@ -1,29 +1,29 @@
 import 'package:covid19_tracker/models/chart_data.dart';
-import 'package:covid19_tracker/models/data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:provider/provider.dart';
 
 class COVIDPieChart extends StatelessWidget {
+  final stats;
+  COVIDPieChart(this.stats);
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<COVIDDataProvider>(context);
-    final covidStats = provider.stats;
     final dataPoints = [
       ChartData(
         label: "Confirmed",
-        count: covidStats.stats.totalConfirmedCases,
+        count: stats.totalConfirmedCases,
         color: Color(0xFFf0134d),
       ),
       ChartData(
         label: "Recovered",
-        count: covidStats.stats.totalRecoveredCases,
+        count: stats.totalRecoveredCases,
         color: Color(0XFFff6f5e),
       ),
       ChartData(
         label: "Deaths",
-        count: covidStats.stats.totalDeaths,
-        color: Color(0xFFf5f0e3),
+        count: stats.totalDeaths,
+        color: Color(
+          0xFFffd31d,
+        ),
       ),
     ];
     final series = [

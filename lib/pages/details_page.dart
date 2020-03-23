@@ -1,9 +1,11 @@
 import 'package:covid19_tracker/models/chart_data.dart';
 import 'package:covid19_tracker/models/data_page_args.dart';
+import 'package:covid19_tracker/utilities/app_colors.dart';
+import 'package:covid19_tracker/widgets/country_card_info.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-class StatsPage extends StatelessWidget {
+class DetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DataPageArguments args = ModalRoute.of(context).settings.arguments;
@@ -11,7 +13,7 @@ class StatsPage extends StatelessWidget {
       charts.Series(
         domainFn: (ChartData data, _) => data.label,
         measureFn: (ChartData data, _) => data.count,
-        colorFn: (_, __) => charts.ColorUtil.fromDartColor(Color(0xFFf5f0e3)),
+        colorFn: (_, __) => charts.ColorUtil.fromDartColor(AppColors.eggWhite),
         id: 'Clicks',
         data: args.chartData,
       ),
@@ -27,10 +29,10 @@ class StatsPage extends StatelessWidget {
         renderSpec: charts.GridlineRendererSpec(
           labelStyle: charts.TextStyleSpec(
             fontSize: 15,
-            color: charts.ColorUtil.fromDartColor(Color(0xFFf5f0e3)),
+            color: charts.ColorUtil.fromDartColor(AppColors.eggWhite),
           ),
           lineStyle: charts.LineStyleSpec(
-            color: charts.MaterialPalette.white,
+            color: charts.ColorUtil.fromDartColor(AppColors.eggWhite),
           ),
         ),
       ),
@@ -44,19 +46,33 @@ class StatsPage extends StatelessWidget {
         child: chart,
       ),
     );
-    // return Scaffold(
+    var countryCards = args.globalData.map(
+      (v) {
+        return CountryInfoCard(v);
+      },
+    ).toList();
     return Scaffold(
       body: SafeArea(
         child: Container(
-          height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: ListView(children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height / 2,
-              width: MediaQuery.of(context).size.width,
-              child: chartWidget,
-            )
-          ]),
+          height: MediaQuery.of(context).size.height,
+          child: ListView(
+            children: <Widget>[
+              Container(
+                height: MediaQuery.of(context).size.height / 2,
+                width: MediaQuery.of(context).size.width,
+                child: chartWidget,
+              ),
+              GridView.count(
+                shrinkWrap: true,
+                mainAxisSpacing: 2,
+                childAspectRatio: 1.3,
+                physics: ScrollPhysics(),
+                crossAxisCount: 2,
+                children: countryCards,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'package:covid19_tracker/models/api_service.dart';
+
 import 'package:covid19_tracker/models/chart_data.dart';
 import 'package:covid19_tracker/models/covid_data.dart';
 import 'package:covid19_tracker/services/networking.dart';
+import 'package:covid19_tracker/utilities/api_service.dart';
 import 'package:flutter/material.dart';
 
 class COVIDDataProvider extends ChangeNotifier {

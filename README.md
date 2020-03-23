@@ -30,7 +30,7 @@ Goal of this project is to display graphical data on the spread of the coronavir
 
 * [ ] Possibly cache data
 
-* [ ] Redesign Home Screen
-* [ ] Find API for COVID News feed
-* [ ] Implement new api
+* [x] Redesign Home Screen
+* [x] Find API for COVID News feed
+* [x] Implement new api
 * [ ] Grid View of data, allows for searching
