@@ -40,6 +40,11 @@ class COVIDDataProvider extends ChangeNotifier {
     return data;
   }
 
+  void resetData() {
+    _data = null;
+    notifyListeners();
+  }
+
   void updateData() async {
     _data = await getCovidStats();
     mapConfirmedHistory();

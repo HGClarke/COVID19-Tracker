@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:covid19_tracker/models/covid_stats_choice.dart';
 import 'package:covid19_tracker/models/data_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -9,6 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class COVIDMap extends StatefulWidget {
+  final COVIDStatChoice statChoice;
+  COVIDMap(this.statChoice);
   @override
   _COVIDMapState createState() => _COVIDMapState();
 }
@@ -18,6 +21,7 @@ class _COVIDMapState extends State<COVIDMap>
   Completer<GoogleMapController> _controller = Completer();
   GoogleMap _map;
   List<Marker> markers = [];
+
   Future data;
   @override
   bool get wantKeepAlive => true;
@@ -38,16 +42,26 @@ class _COVIDMapState extends State<COVIDMap>
         .toList();
     markers = filteredList.map<Marker>(
       (item) {
+        var total;
+        switch (widget.statChoice) {
+          case COVIDStatChoice.confirmed:
+            total = item.totalConfirmedCases;
+            break;
+          case COVIDStatChoice.recovered:
+            total = item.totalRecoveredCases;
+            break;
+          case COVIDStatChoice.deaths:
+            total = item.totalDeaths;
+        }
         return Marker(
           markerId: MarkerId(Uuid().v4()),
-          position: LatLng(item.location.lat, item.location.long
-              // item.location.lat,
-              // item.location.long,
-              ),
-          onTap: () {
-            print(
-                'Country/Region: ${item.location.countryOrRegion}, Confirmed: ${item.totalConfirmedCases}');
-          },
+          position: LatLng(
+            item.location.lat,
+            item.location.long,
+          ),
+          infoWindow: InfoWindow(
+            title: '${item.location.countryOrRegion}: $total cases',
+          ),
         );
       },
     ).toList();
@@ -61,7 +75,7 @@ class _COVIDMapState extends State<COVIDMap>
         mapType: MapType.normal,
         initialCameraPosition: CameraPosition(
           target: LatLng(37.0902, -95.7129),
-          zoom: 100,
+          zoom: 3,
         ),
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);

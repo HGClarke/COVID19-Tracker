@@ -5,7 +5,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 class COVIDPieChart extends StatelessWidget {
   final stats;
-  COVIDPieChart(this.stats);
+  const COVIDPieChart(this.stats);
   @override
   Widget build(BuildContext context) {
     final dataPoints = [

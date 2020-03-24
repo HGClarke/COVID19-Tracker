@@ -8,10 +8,11 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
+  static bool _didBuild = false;
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<COVIDDataProvider>(context);
-
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -26,74 +27,71 @@ class HomePage extends StatelessWidget {
           child: FutureBuilder<COVID19Data>(
             future: provider.getCovidStats(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                case ConnectionState.waiting:
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SpinKitCircle(
-                          color: Color(
-                            0xFFf0134d,
-                          ),
-                          size: 80,
+              if (snapshot.connectionState == ConnectionState.none ||
+                  (snapshot.connectionState == ConnectionState.waiting &&
+                      _didBuild == false)) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SpinKitCircle(
+                        color: Color(
+                          0xFFf0134d,
                         ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Loading data...',
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                default:
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        'An error has occurred',
+                        size: 80,
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Loading data...',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       ),
-                    );
-                  } else if (snapshot.hasData) {
-                    final data = snapshot.data;
-
-                    return Column(
-                      children: [
-                        COVIDPieChart(data.stats),
-                        SizedBox(height: 10),
-                        DataCard(
-                          totalCases: data.stats.totalConfirmedCases,
-                          newCases: data.stats.newlyConfirmedCases,
-                          topLabel: 'Total Confirmed',
-                          bottomLabel: "Newly Confirmed",
-                          history: provider.confirmedHistory,
-                          choice: COVIDStatChoice.confirmed,
-                        ),
-                        DataCard(
-                          totalCases: data.stats.totalRecoveredCases,
-                          newCases: data.stats.newlyRecoveredCases,
-                          topLabel: 'Total Recovered',
-                          bottomLabel: "Newly Recovered",
-                          history: provider.recoveredHistory,
-                          choice: COVIDStatChoice.recovered,
-                        ),
-                        DataCard(
-                          totalCases: data.stats.totalDeaths,
-                          newCases: data.stats.newDeaths,
-                          topLabel: 'Total Deaths',
-                          bottomLabel: "New Deaths",
-                          history: provider.deathsHistory,
-                          choice: COVIDStatChoice.deaths,
-                        ),
-                      ],
-                    );
-                  }
+                    ],
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    'An error has occurred',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                );
               }
+              final data = snapshot.data;
+              _didBuild = true;
+              return Column(
+                children: [
+                  COVIDPieChart(data.stats),
+                  SizedBox(height: 10),
+                  DataCard(
+                    totalCases: data.stats.totalConfirmedCases,
+                    newCases: data.stats.newlyConfirmedCases,
+                    topLabel: 'Total Confirmed',
+                    bottomLabel: "Newly Confirmed",
+                    history: provider.confirmedHistory,
+                    choice: COVIDStatChoice.confirmed,
+                  ),
+                  DataCard(
+                    totalCases: data.stats.totalRecoveredCases,
+                    newCases: data.stats.newlyRecoveredCases,
+                    topLabel: 'Total Recovered',
+                    bottomLabel: "Newly Recovered",
+                    history: provider.recoveredHistory,
+                    choice: COVIDStatChoice.recovered,
+                  ),
+                  DataCard(
+                    totalCases: data.stats.totalDeaths,
+                    newCases: data.stats.newDeaths,
+                    topLabel: 'Total Deaths',
+                    bottomLabel: "New Deaths",
+                    history: provider.deathsHistory,
+                    choice: COVIDStatChoice.deaths,
+                  ),
+                ],
+              );
             },
           ),
         ),
@@ -103,6 +101,8 @@ class HomePage extends StatelessWidget {
           0xFFf0134d,
         ),
         onPressed: () {
+          _didBuild = false;
+
           Provider.of<COVIDDataProvider>(context, listen: false).updateData();
           // Navigator.pu
         },

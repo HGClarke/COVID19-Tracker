@@ -69,7 +69,7 @@ class DataCard extends StatelessWidget {
           Navigator.pushNamed(
             context,
             PageRoutes.detailsPage,
-            arguments: DataPageArguments(history, data),
+            arguments: DetailsPageArguments(history, data, choice),
           );
         },
         child: Card(
