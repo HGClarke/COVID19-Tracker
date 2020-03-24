@@ -23,11 +23,12 @@ class HomePage extends StatelessWidget {
           // color: Colors.white,
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: FutureProvider<COVID19Data>(
-            create: (_) => provider.getCovidStats(),
-            child: Consumer<COVID19Data>(
-              builder: (context, data, child) {
-                if (data == null) {
+          child: FutureBuilder<COVID19Data>(
+            future: provider.getCovidStats(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                case ConnectionState.waiting:
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -48,40 +49,52 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                   );
-                } else {
-                  return Column(
-                    children: [
-                      COVIDPieChart(data.stats),
-                      SizedBox(height: 10),
-                      DataCard(
-                        totalCases: data.stats.totalConfirmedCases,
-                        newCases: data.stats.newlyConfirmedCases,
-                        topLabel: 'Total Confirmed',
-                        bottomLabel: "Newly Confirmed",
-                        history: provider.confirmedHistory,
-                        choice: COVIDStatChoice.confirmed,
+                default:
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        'An error has occurred',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
                       ),
-                      DataCard(
-                        totalCases: data.stats.totalRecoveredCases,
-                        newCases: data.stats.newlyRecoveredCases,
-                        topLabel: 'Total Recovered',
-                        bottomLabel: "Newly Recovered",
-                        history: provider.recoveredHistory,
-                        choice: COVIDStatChoice.recovered,
-                      ),
-                      DataCard(
-                        totalCases: data.stats.totalDeaths,
-                        newCases: data.stats.newDeaths,
-                        topLabel: 'Total Deaths',
-                        bottomLabel: "New Deaths",
-                        history: provider.deathsHistory,
-                        choice: COVIDStatChoice.deaths,
-                      ),
-                    ],
-                  );
-                }
-              },
-            ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final data = snapshot.data;
+
+                    return Column(
+                      children: [
+                        COVIDPieChart(data.stats),
+                        SizedBox(height: 10),
+                        DataCard(
+                          totalCases: data.stats.totalConfirmedCases,
+                          newCases: data.stats.newlyConfirmedCases,
+                          topLabel: 'Total Confirmed',
+                          bottomLabel: "Newly Confirmed",
+                          history: provider.confirmedHistory,
+                          choice: COVIDStatChoice.confirmed,
+                        ),
+                        DataCard(
+                          totalCases: data.stats.totalRecoveredCases,
+                          newCases: data.stats.newlyRecoveredCases,
+                          topLabel: 'Total Recovered',
+                          bottomLabel: "Newly Recovered",
+                          history: provider.recoveredHistory,
+                          choice: COVIDStatChoice.recovered,
+                        ),
+                        DataCard(
+                          totalCases: data.stats.totalDeaths,
+                          newCases: data.stats.newDeaths,
+                          topLabel: 'Total Deaths',
+                          bottomLabel: "New Deaths",
+                          history: provider.deathsHistory,
+                          choice: COVIDStatChoice.deaths,
+                        ),
+                      ],
+                    );
+                  }
+              }
+            },
           ),
         ),
       ),
