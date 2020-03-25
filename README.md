@@ -16,11 +16,11 @@ COVID-19 data is retrieved from [Smartable](https://developer.smartable.ai)
 
 
 <p float="left">
-<img src="lib/screenshots/home_screen.png" width="250"/>
+<img src="lib/screenshots/home.png" width="250"/>
 
-<img src="lib/screenshots/bar_chart.png" width="250"/>
+<img src="lib/screenshots/graph.png" width="250"/>
 
-<img src="lib/screenshots/country_cases.png" width="250" />
+<img src="lib/screenshots/map.png" width="250" />
 </p>
 
  
@@ -81,15 +81,20 @@ COVID-19 data is retrieved from [Smartable](https://developer.smartable.ai)
 
 * [CSV (Package for parsing csv files)](https://pub.dev/packages/csv) (No longer in use due to using API instead now)
 
-## Bugs/Challenges Faced
+## Challenges Faced
 
-* Due to asynchronous calls, values would be null at run-time which resulted in errors or crashes
-
-* Figuring out a way to allow multiple pages to use data from http call without having to pass data to each Widget
+* Figuring out a way to allow multiple pages to use data from http call without having to pass entired data object to each Widget
 
 * Building charts to represent data from API
 
-* Designing User Interface,  
+* Designing User Interface
 
-* Bug still occurs where app is stuck in loading state if the app is opened without connection and then eventually connects
+* Learning Provider Architecture
+
+## Bugs
+
+* Due to asynchronous calls, values would be null at run-time which resulted in errors or crashes (Fixed)
+
+
+* Bug occurs where app is stuck in loading state if the app is opened without connection and then eventually connects (Fixed)
 
