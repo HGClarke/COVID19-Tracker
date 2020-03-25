@@ -55,5 +55,5 @@ Runner/GeneratedPluginRegistrant.*
 .vscode/
 
 lib/models/api_service.dart
-ios/Runner/AppDelegate.swift
-android/app/src/main/AndroidManifest.xml
+/ios/Runner/AppDelegate.swift
+/android/app/src/main/AndroidManifest.xml

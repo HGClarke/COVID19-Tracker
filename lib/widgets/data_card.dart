@@ -6,21 +6,19 @@ import 'package:covid19_tracker/models/data_provider.dart';
 import 'package:covid19_tracker/utilities/page_routes.dart';
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart';
-
 class DataCard extends StatelessWidget {
   final int totalCases;
   final int newCases;
   final String topLabel;
   final String bottomLabel;
-  final List<ChartData> history;
+  final List<ChartData> chartData;
   final COVIDStatChoice choice;
   DataCard({
     this.totalCases = 0,
     this.newCases = 0,
     @required this.topLabel,
     @required this.bottomLabel,
-    @required this.history,
+    @required this.chartData,
     @required this.choice,
   });
   @override
@@ -28,9 +26,10 @@ class DataCard extends StatelessWidget {
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          final provider =
-              Provider.of<COVIDDataProvider>(context, listen: false);
-          final breakdowns = provider.stats.stats.breakdowns
+          final COVIDDataProvider covidData =
+              COVIDDataProvider.of(context, listen: false);
+
+          final breakdowns = covidData.stats.stats.breakdowns
               .where((v) => v.location.lat != null || v.location.long != null);
           var data;
           switch (choice) {
@@ -69,7 +68,7 @@ class DataCard extends StatelessWidget {
           Navigator.pushNamed(
             context,
             PageRoutes.detailsPage,
-            arguments: DetailsPageArguments(history, data, choice),
+            arguments: DetailPageArguments(chartData, data, choice),
           );
         },
         child: Card(
