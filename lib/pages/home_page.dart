@@ -1,17 +1,15 @@
 import 'dart:convert';
-
 import 'package:covid19_tracker/models/chart_data.dart';
 import 'package:covid19_tracker/models/covid_data.dart';
-import 'package:covid19_tracker/models/covid_stats_choice.dart';
+import 'package:covid19_tracker/models/covid_stat_choice.dart';
 import 'package:covid19_tracker/models/data_provider.dart';
 import 'package:covid19_tracker/models/history.dart';
 import 'package:covid19_tracker/services/networking.dart';
 import 'package:covid19_tracker/utilities/api_service.dart';
-import 'package:covid19_tracker/widgets/data_card.dart';
-import 'package:covid19_tracker/widgets/pie_chart.dart';
+import 'package:covid19_tracker/utilities/app_colors.dart';
+import 'package:covid19_tracker/utilities/page_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:provider/provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -29,7 +27,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<COVID19Data> getCovidStats(BuildContext context) async {
-    final networkService = NetworkService(APIService.globalDataURL);
+    final networkService =
+        NetworkService(APIService.globalDataURL, APIService.covidStatsHeaders);
     var data;
     try {
       final response = await networkService.fetchData();
@@ -76,82 +75,115 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: AppColors.red,
+
       body: SafeArea(
-        child: Container(
-            margin: const EdgeInsets.only(
-              left: 10,
-              right: 10,
-              bottom: 40,
-            ),
-            // color: Colors.white,
-            height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: Container(
             width: MediaQuery.of(context).size.width,
-            child: Consumer<COVIDDataProvider>(
-              builder: (context, covidData, child) {
-                if (!covidData.hasData) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+            padding: EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'COVID-19 Tracker',
+                  style: Theme.of(context).textTheme.title.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Select any option below",
+                  style: Theme.of(context).textTheme.title.copyWith(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+                SizedBox(
+                  height: 32,
+                ),
+                Column(
+                  children: <Widget>[
+                    Row(
                       children: <Widget>[
-                        SpinKitCircle(
-                          color: Color(
-                            0xFFf0134d,
-                          ),
-                          size: 80,
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Loading data...',
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
+                        createItem(
+                            context,
+                            FontAwesomeIcons.globe,
+                            "Global Stats",
+                            "See Global COVID-19 Data",
+                            PageRoutes.globalStatsPage),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        createItem(
+                          context,
+                          FontAwesomeIcons.globeAmericas,
+                          "Countries",
+                          "See specific country data",
+                          PageRoutes.countriesPage,
                         ),
                       ],
                     ),
-                  );
-                } else {
-                  final stats = covidData.stats.stats;
-                  return Column(
-                    children: [
-                      COVIDPieChart(stats),
-                      SizedBox(height: 10),
-                      DataCard(
-                        totalCases: covidData.stats.stats.totalConfirmedCases,
-                        newCases: covidData.stats.stats.newlyConfirmedCases,
-                        topLabel: 'Total Confirmed',
-                        bottomLabel: "Newly Confirmed",
-                        chartData: _createChartData(
-                            stats.history, COVIDStatChoice.confirmed),
-                        choice: COVIDStatChoice.confirmed,
-                      ),
-                      DataCard(
-                        totalCases: stats.totalRecoveredCases,
-                        newCases: stats.newlyRecoveredCases,
-                        topLabel: 'Total Recovered',
-                        bottomLabel: "Newly Recovered",
-                        chartData: _createChartData(
-                            stats.history, COVIDStatChoice.recovered),
-                        choice: COVIDStatChoice.recovered,
-                      ),
-                      DataCard(
-                        totalCases: stats.totalDeaths,
-                        newCases: stats.newDeaths,
-                        topLabel: 'Total Deaths',
-                        bottomLabel: "New Deaths",
-                        chartData: _createChartData(
-                            stats.history, COVIDStatChoice.deaths),
-                        choice: COVIDStatChoice.deaths,
-                      ),
-                    ],
-                  );
-                }
-              },
-            )),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        createItem(
+                          context,
+                          FontAwesomeIcons.newspaper,
+                          "News",
+                          "Stay up-to-date",
+                          PageRoutes.newsPage,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        createItem(
+                          context,
+                          Icons.info,
+                          "Info",
+                          "Learn more about COVID-19",
+                          PageRoutes.home,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        createItem(
+                          context,
+                          FontAwesomeIcons.solidFrown,
+                          "Symptoms/Prevention",
+                          "Learn how to stay safe",
+                          PageRoutes.home,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(
-          0xFFf0134d,
-        ),
+        backgroundColor: AppColors.salmon,
         onPressed: () {
           COVIDDataProvider covidData =
               COVIDDataProvider.of(context, listen: false);
@@ -160,6 +192,56 @@ class _HomePageState extends State<HomePage> {
         child: Icon(
           Icons.autorenew,
           color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  Widget createItem(BuildContext context, IconData icon, String title,
+      String subtitle, String route,
+      {args}) {
+    return Expanded(
+      child: InkWell(
+        onTap: () {
+          Navigator.pushNamed(context, route, arguments: args);
+        },
+        child: Container(
+          padding: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Colors.black26,
+            borderRadius: BorderRadius.all(
+              Radius.circular(5.0),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Icon(
+                icon,
+                size: 32.0,
+                color: AppColors.teal,
+              ),
+              SizedBox(
+                height: 24.0,
+              ),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.title.copyWith(
+                      color: Colors.white,
+                    ),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.caption.copyWith(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+              ),
+            ],
+          ),
         ),
       ),
     );
