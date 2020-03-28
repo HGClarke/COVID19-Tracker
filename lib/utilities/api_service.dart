@@ -5,6 +5,5 @@ class APIService {
   };
   static const newsURL =
       "https://newsapi.org/v2/top-headlines?q=coronavirus&sortBy=publishedAt&apiKey=8f98d1cbb7224ac59b3b0b05ef5f99d8&pageSize=20&country=us";
-  static const globalDataURL =
-      "https://api.smartable.ai/coronavirus/stats/global";
+  static const baseDataURL = "https://api.smartable.ai/coronavirus/stats/";
 }

@@ -1,6 +1,6 @@
 import 'package:covid19_tracker/models/news_data_provider.dart';
 import 'package:covid19_tracker/pages/countries_page.dart';
-import 'package:covid19_tracker/pages/global_stats.dart';
+import 'package:covid19_tracker/pages/stats_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,9 +25,10 @@ class MyApp extends StatelessWidget {
         initialRoute: PageRoutes.home,
         routes: {
           PageRoutes.home: (context) => HomePage(),
-          PageRoutes.globalStatsPage: (context) => GlobalStatsPage(),
+          PageRoutes.globalStatsPage: (context) => StatsPage(),
           PageRoutes.newsPage: (context) => NewsPage(),
           PageRoutes.countriesPage: (context) => CountriesPage(),
+          PageRoutes.statsPage: (context) => StatsPage(),
         },
       ),
     );

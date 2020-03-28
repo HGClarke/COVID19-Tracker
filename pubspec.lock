@@ -78,15 +78,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.3"
-  flushbar:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: master
-      resolved-ref: "681425d7e1177dbd714c13af5460ee4e836edac9"
-      url: "git://github.com/valterh4ck3r/flushbar"
-    source: git
-    version: "1.9.1"
   flutter:
     dependency: "direct main"
     description: flutter

@@ -4,6 +4,7 @@ import 'package:covid19_tracker/models/covid_data.dart';
 import 'package:covid19_tracker/models/covid_stat_choice.dart';
 import 'package:covid19_tracker/models/data_provider.dart';
 import 'package:covid19_tracker/models/history.dart';
+import 'package:covid19_tracker/models/stats_page_args.dart';
 import 'package:covid19_tracker/services/networking.dart';
 import 'package:covid19_tracker/utilities/api_service.dart';
 import 'package:covid19_tracker/utilities/app_colors.dart';
@@ -27,8 +28,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<COVID19Data> getCovidStats(BuildContext context) async {
-    final networkService =
-        NetworkService(APIService.globalDataURL, APIService.covidStatsHeaders);
+    final networkService = NetworkService(
+        APIService.baseDataURL + 'global', APIService.covidStatsHeaders);
     var data;
     try {
       final response = await networkService.fetchData();
@@ -109,11 +110,16 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       children: <Widget>[
                         createItem(
-                            context,
-                            FontAwesomeIcons.globe,
-                            "Global Stats",
-                            "See Global COVID-19 Data",
-                            PageRoutes.globalStatsPage),
+                          context,
+                          FontAwesomeIcons.globe,
+                          "Global Stats",
+                          "See Global COVID-19 Data",
+                          PageRoutes.globalStatsPage,
+                          args: StatsPageArgs(
+                            'Global',
+                            'global',
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(

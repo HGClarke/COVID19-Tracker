@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:covid19_tracker/utilities/app_colors.dart';
-import 'package:flushbar/flushbar.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
@@ -68,10 +68,6 @@ class _NewsPageState extends State<NewsPage> {
                       GestureDetector(
                         onTap: () async {
                           // if (article.url == null) {
-                          Flushbar(
-                            title: 'Error',
-                            message: 'Could not open this article.',
-                          ).show(context);
                         },
                         child: Container(
                           margin: const EdgeInsets.symmetric(vertical: 8),

@@ -4,4 +4,6 @@ class PageRoutes {
   static const globalStatsPage = '/global-stats';
   static const newsPage = '/news';
   static const countriesPage = '/countries';
+
+  static const statsPage = '/country-stats';
 }
