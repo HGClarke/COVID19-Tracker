@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:covid19_tracker/models/covid_data.dart';
-import 'package:covid19_tracker/models/data_provider.dart';
 import 'package:covid19_tracker/models/stats_page_args.dart';
 import 'package:covid19_tracker/services/networking.dart';
 import 'package:covid19_tracker/utilities/api_service.dart';

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:covid19_tracker/utilities/app_colors.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
@@ -67,7 +66,39 @@ class _NewsPageState extends State<NewsPage> {
                       Divider(color: Colors.white),
                       GestureDetector(
                         onTap: () async {
-                          // if (article.url == null) {
+                          if (article.url == null) {
+                            final snackbar = SnackBar(
+                              content: Text(
+                                'An error occurred while trying to open this article.',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .title
+                                    .copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w100,
+                                        fontSize: 18),
+                              ),
+                              backgroundColor: Colors.redAccent,
+                            );
+                            Scaffold.of(context).showSnackBar(snackbar);
+                          } else if (await canLaunch(article.url)) {
+                            launch(article.url);
+                          } else {
+                            final snackbar = SnackBar(
+                              content: Text(
+                                'An error occurred while trying to open this article.',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .title
+                                    .copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w100,
+                                        fontSize: 18),
+                              ),
+                              backgroundColor: Colors.redAccent,
+                            );
+                            Scaffold.of(context).showSnackBar(snackbar);
+                          }
                         },
                         child: Container(
                           margin: const EdgeInsets.symmetric(vertical: 8),

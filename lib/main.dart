@@ -1,4 +1,3 @@
-import 'package:covid19_tracker/models/news_data_provider.dart';
 import 'package:covid19_tracker/pages/countries_page.dart';
 import 'package:covid19_tracker/pages/stats_page.dart';
 import 'package:flutter/cupertino.dart';

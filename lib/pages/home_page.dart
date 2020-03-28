@@ -1,9 +1,6 @@
 import 'dart:convert';
-import 'package:covid19_tracker/models/chart_data.dart';
 import 'package:covid19_tracker/models/covid_data.dart';
-import 'package:covid19_tracker/models/covid_stat_choice.dart';
 import 'package:covid19_tracker/models/data_provider.dart';
-import 'package:covid19_tracker/models/history.dart';
 import 'package:covid19_tracker/models/stats_page_args.dart';
 import 'package:covid19_tracker/services/networking.dart';
 import 'package:covid19_tracker/utilities/api_service.dart';
@@ -43,34 +40,6 @@ class _HomePageState extends State<HomePage> {
     }
 
     return data;
-  }
-
-  List<ChartData> _createChartData(
-      List<History> history, COVIDStatChoice choice) {
-    return history.map((History v) {
-      ChartData data;
-      switch (choice) {
-        case COVIDStatChoice.confirmed:
-          data = ChartData(
-            label: v.date,
-            count: v.confirmed,
-          );
-          break;
-        case COVIDStatChoice.recovered:
-          data = ChartData(
-            label: v.date,
-            count: v.recovered,
-          );
-          break;
-        case COVIDStatChoice.deaths:
-          data = ChartData(
-            label: v.date,
-            count: v.deaths,
-          );
-          break;
-      }
-      return data;
-    }).toList();
   }
 
   @override
