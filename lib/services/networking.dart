@@ -3,10 +3,11 @@ import 'package:http/http.dart' as http;
 
 class NetworkService {
   final url;
+  Map<String, dynamic> headers;
 
-  NetworkService(this.url);
+  NetworkService(this.url, this.headers);
 
   Future<http.Response> fetchData() async {
-    return http.get(url, headers: APIService.headers);
+    return http.get(url, headers: APIService.covidStatsHeaders);
   }
 }

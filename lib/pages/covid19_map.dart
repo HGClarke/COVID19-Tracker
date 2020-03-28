@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:covid19_tracker/models/covid_stats_choice.dart';
+import 'package:covid19_tracker/models/covid_stat_choice.dart';
 import 'package:covid19_tracker/models/data_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';

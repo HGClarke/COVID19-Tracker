@@ -1,9 +1,13 @@
-import 'package:covid19_tracker/pages/details_page.dart';
+import 'package:covid19_tracker/models/news_data_provider.dart';
+import 'package:covid19_tracker/pages/countries_page.dart';
+import 'package:covid19_tracker/pages/global_stats.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'models/data_provider.dart';
 import 'pages/home_page.dart';
+import 'pages/news.dart';
 import 'utilities/page_routes.dart';
 
 void main() => runApp(MyApp());
@@ -15,11 +19,15 @@ class MyApp extends StatelessWidget {
       create: (_) => COVIDDataProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData.dark(),
+        theme: ThemeData.dark().copyWith(
+          textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
+        ),
         initialRoute: PageRoutes.home,
         routes: {
           PageRoutes.home: (context) => HomePage(),
-          PageRoutes.detailsPage: (context) => DetailsPage(),
+          PageRoutes.globalStatsPage: (context) => GlobalStatsPage(),
+          PageRoutes.newsPage: (context) => NewsPage(),
+          PageRoutes.countriesPage: (context) => CountriesPage(),
         },
       ),
     );
