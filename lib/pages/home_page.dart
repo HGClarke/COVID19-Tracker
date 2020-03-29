@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:covid19_tracker/models/covid_data.dart';
 import 'package:covid19_tracker/models/data_provider.dart';
 import 'package:covid19_tracker/models/stats_page_args.dart';
@@ -6,6 +8,7 @@ import 'package:covid19_tracker/services/networking.dart';
 import 'package:covid19_tracker/utilities/api_service.dart';
 import 'package:covid19_tracker/utilities/app_colors.dart';
 import 'package:covid19_tracker/utilities/page_routes.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -15,6 +18,34 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+  final Firestore _db = Firestore.instance;
+
+  @override
+  void initState() {
+    _registerPushNotifications();
+
+    super.initState();
+  }
+
+  void _registerPushNotifications() {
+    _fcm.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+    _fcm.onIosSettingsRegistered.listen((settings) {
+      print('Settings registered $settings');
+    });
+    _fcm.getToken().then((String token) {
+      if (token != null) {
+        var tokens = _db.collection('tokens');
+        tokens.document(token).setData({
+          'token': token, // optional
+          'platform': Platform.operatingSystem
+        });
+        print('Saved token $token');
+      }
+    });
+  }
+
   @override
   void didChangeDependencies() {
     COVIDDataProvider data = COVIDDataProvider.of(context);
