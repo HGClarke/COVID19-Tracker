@@ -1,8 +1,8 @@
-import 'package:covid19_tracker/models/chart_data.dart';
+// import 'package:covid19_tracker/models/chart_data.dart';
 
-import 'package:covid19_tracker/utilities/app_colors.dart';
-import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+// import 'package:covid19_tracker/utilities/app_colors.dart';
+// import 'package:flutter/material.dart';
+// import 'package:charts_flutter/flutter.dart' as charts;
 
 // var series = [
 //       charts.Series<ChartData, DateTime>(

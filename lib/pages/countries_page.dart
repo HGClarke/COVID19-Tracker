@@ -87,7 +87,7 @@ class _CountriesPageState extends State<CountriesPage> {
                                   v.location.isoCode != null &&
                                   v.location.countryOrRegion
                                       .toLowerCase()
-                                      .contains(text.trim()))
+                                      .contains(text.trim().toLowerCase()))
                               .toList();
                         },
                       );
