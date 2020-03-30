@@ -41,13 +41,16 @@ class COVIDPieChart extends StatelessWidget {
       behaviors: [
         charts.DatumLegend(
           entryTextStyle: charts.TextStyleSpec(
-            color: charts.MaterialPalette.white,
-            fontSize: 16,
-          ),
+              color: charts.MaterialPalette.white,
+              fontSize: 16,
+              fontFamily: Theme.of(context).textTheme.title.fontFamily),
           position: charts.BehaviorPosition.end,
           outsideJustification: charts.OutsideJustification.middleDrawArea,
         )
       ],
+      defaultRenderer: charts.ArcRendererConfig(
+        strokeWidthPx: 0,
+      ),
     );
   }
 }

@@ -30,6 +30,7 @@ dependencies:
   url_launcher: ^5.4.2
   cloud_firestore: ^0.13.4+2
   firebase_messaging: ^6.0.13
+  smooth_page_indicator: ^0.1.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

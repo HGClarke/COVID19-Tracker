@@ -1,4 +1,5 @@
 import 'package:covid19_tracker/pages/countries_page.dart';
+import 'package:covid19_tracker/pages/info_page.dart';
 import 'package:covid19_tracker/pages/stats_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
           PageRoutes.newsPage: (context) => NewsPage(),
           PageRoutes.countriesPage: (context) => CountriesPage(),
           PageRoutes.statsPage: (context) => StatsPage(),
+          PageRoutes.infoPage: (context) => InfoPage()
         },
       ),
     );

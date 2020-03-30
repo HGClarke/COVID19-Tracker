@@ -37,6 +37,11 @@ class _CountriesPageState extends State<CountriesPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // var _filteredBreakdowns = COVIDDataProvider.of(context)
     //     .stats
@@ -68,6 +73,10 @@ class _CountriesPageState extends State<CountriesPage> {
               child: Column(
                 children: <Widget>[
                   TextField(
+                    style: Theme.of(context).textTheme.title.copyWith(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
                     decoration: InputDecoration(
                       suffixIcon: Icon(Icons.search),
                       hintText: 'Search',

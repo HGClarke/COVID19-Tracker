@@ -17,8 +17,6 @@ class Location {
   Location.fromJson(Map<String, dynamic> json) {
     long = json['long'];
     countryOrRegion = json['countryOrRegion'];
-    provinceOrState = json['provinceOrState'];
-    county = json['county'];
     isoCode = json['isoCode'];
     lat = json['lat'];
   }

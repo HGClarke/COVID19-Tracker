@@ -16,11 +16,11 @@ class StatsPage extends StatefulWidget {
 }
 
 class _StatsPageState extends State<StatsPage> {
-  COVID19Data covidData;
+  COVID19Data countryData;
 
   @override
   void didChangeDependencies() {
-    if (covidData == null) {
+    if (countryData == null) {
       _getCountryData();
     }
     super.didChangeDependencies();
@@ -36,10 +36,10 @@ class _StatsPageState extends State<StatsPage> {
       var data = COVID19Data.fromJson(jsonDecode(response.body));
 
       setState(() {
-        covidData = data;
+        countryData = data;
       });
     } catch (e) {
-      print(e);
+      print("Error $e");
     }
   }
 
@@ -52,14 +52,14 @@ class _StatsPageState extends State<StatsPage> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         title: Text(
-          '${args.countryOrRegion ?? "Global"}',
+          '${args.countryOrRegion}',
           style: Theme.of(context).textTheme.title.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
               ),
         ),
       ),
-      body: covidData == null
+      body: countryData == null
           ? Center(
               child: SpinKitFadingFour(
                 color: AppColors.teal,
@@ -74,11 +74,11 @@ class _StatsPageState extends State<StatsPage> {
                   children: <Widget>[
                     Container(
                       height: 250,
-                      child: COVIDPieChart(covidData.stats),
+                      child: COVIDPieChart(countryData.stats),
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Last updated ${DateFormat("dd, MMM yyyy hh:mm a").format(DateTime.parse(covidData.updatedDateTime))}',
+                      'Last updated ${DateFormat("dd, MMM yyyy hh:mm a").format(DateTime.parse(countryData.updatedDateTime))}',
                       style: Theme.of(context).textTheme.title.copyWith(
                             color: Colors.white,
                             fontSize: 16,
@@ -95,8 +95,8 @@ class _StatsPageState extends State<StatsPage> {
                               context,
                               "Confirmed",
                               AppColors.teal,
-                              covidData.stats.totalConfirmedCases,
-                              covidData.stats.newlyConfirmedCases,
+                              countryData.stats.totalConfirmedCases,
+                              countryData.stats.newlyConfirmedCases,
                             ),
                             SizedBox(
                               width: 30,
@@ -105,8 +105,8 @@ class _StatsPageState extends State<StatsPage> {
                               context,
                               "Recovered",
                               AppColors.salmon,
-                              covidData.stats.totalRecoveredCases,
-                              covidData.stats.newlyRecoveredCases,
+                              countryData.stats.totalRecoveredCases,
+                              countryData.stats.newlyRecoveredCases,
                             )
                           ],
                         ),
@@ -119,8 +119,8 @@ class _StatsPageState extends State<StatsPage> {
                               context,
                               "Deaths",
                               AppColors.yellow,
-                              covidData.stats.totalDeaths,
-                              covidData.stats.newDeaths,
+                              countryData.stats.totalDeaths,
+                              countryData.stats.newDeaths,
                             ),
                             SizedBox(
                               width: 30,
@@ -129,12 +129,12 @@ class _StatsPageState extends State<StatsPage> {
                               context,
                               "Total",
                               AppColors.eggWhite,
-                              covidData.stats.totalConfirmedCases +
-                                  covidData.stats.totalDeaths +
-                                  covidData.stats.totalRecoveredCases,
-                              covidData.stats.newlyRecoveredCases +
-                                  covidData.stats.newDeaths +
-                                  covidData.stats.newlyConfirmedCases,
+                              countryData.stats.totalConfirmedCases +
+                                  countryData.stats.totalDeaths +
+                                  countryData.stats.totalRecoveredCases,
+                              countryData.stats.newlyRecoveredCases +
+                                  countryData.stats.newDeaths +
+                                  countryData.stats.newlyConfirmedCases,
                             )
                           ],
                         )

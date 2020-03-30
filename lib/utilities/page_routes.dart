@@ -6,4 +6,6 @@ class PageRoutes {
   static const countriesPage = '/countries';
 
   static const statsPage = '/country-stats';
+
+  static const infoPage = '/info';
 }
