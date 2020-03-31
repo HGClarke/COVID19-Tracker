@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "559077318966",
+    "firebase_url": "https://covid-271502.firebaseio.com",
+    "project_id": "covid-271502",
+    "storage_bucket": "covid-271502.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559077318966:android:c3cb5c07ef460298cb5397",
+        "android_client_info": {
+          "package_name": "com.clarkecodes.covid19_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "559077318966-39add2gbvvv2j5gckh8mkoudepptic32.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUAZEIg_NFxNGg5V6-AgD0WnEDVZICiNQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "559077318966-39add2gbvvv2j5gckh8mkoudepptic32.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "559077318966-djd8ts38cde5a8ctuofsm6a5b3c3hufs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.clarkecodes.covid19Tracker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

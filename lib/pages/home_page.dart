@@ -148,18 +148,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.salmon,
-        onPressed: () {
-          COVIDDataProvider covidData =
-              COVIDDataProvider.of(context, listen: false);
-          covidData.resetData();
-        },
-        child: Icon(
-          Icons.autorenew,
-          color: Colors.white,
-        ),
-      ),
     );
   }
 }
