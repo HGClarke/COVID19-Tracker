@@ -23,21 +23,23 @@ class _StatsPageState extends State<StatsPage> {
 
   void _getCountryData() async {
     final provider = COVIDDataProvider.of(context);
-    final allStats = provider.stats.stats;
-    if (provider.selectedIndex == -1) {
-      countryData = Breakdowns(
-        location: Location(countryOrRegion: 'Global'),
-        totalConfirmedCases: allStats.totalConfirmedCases,
-        totalRecoveredCases: allStats.totalRecoveredCases,
-        totalDeaths: allStats.totalDeaths,
-        newlyConfirmedCases: allStats.newlyConfirmedCases,
-        newlyRecoveredCases: allStats.newlyRecoveredCases,
-        newDeaths: allStats.newDeaths,
-      );
-    } else {
-      final countryStatsInfo =
-          provider.stats.stats.breakdowns[provider.selectedIndex];
-      countryData = countryStatsInfo;
+    if (provider.hasData) {
+      final allStats = provider.stats.stats;
+      if (provider.selectedIndex == -1) {
+        countryData = Breakdowns(
+          location: Location(countryOrRegion: 'Global'),
+          totalConfirmedCases: allStats.totalConfirmedCases,
+          totalRecoveredCases: allStats.totalRecoveredCases,
+          totalDeaths: allStats.totalDeaths,
+          newlyConfirmedCases: allStats.newlyConfirmedCases,
+          newlyRecoveredCases: allStats.newlyRecoveredCases,
+          newDeaths: allStats.newDeaths,
+        );
+      } else {
+        final countryStatsInfo =
+            provider.stats.stats.breakdowns[provider.selectedIndex];
+        countryData = countryStatsInfo;
+      }
     }
   }
 
@@ -57,7 +59,7 @@ class _StatsPageState extends State<StatsPage> {
               ),
         ),
       ),
-      body: countryData == null
+      body: !provider.hasData
           ? Center(
               child: SpinKitFadingFour(
                 color: AppColors.teal,
