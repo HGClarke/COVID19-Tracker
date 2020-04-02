@@ -40,7 +40,6 @@ News articles are found from [News API](newsapi.org)
 
 ### Global Stats Page
 
-
 <img src="lib/screenshots/global.png" width="250"/>
 
 ### Countries Page
@@ -60,8 +59,7 @@ News articles are found from [News API](newsapi.org)
 <img src="lib/screenshots/info_2.png" width="250" />
 </p>
 
- 
-## Technologies Used
+## Packages Used
 
 * [Flutter Provider](https://pub.dev/packages/provider)
 

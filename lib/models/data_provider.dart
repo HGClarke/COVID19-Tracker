@@ -4,14 +4,18 @@ import 'package:provider/provider.dart';
 
 class COVIDDataProvider extends ChangeNotifier {
   COVID19Data _data;
-  // List<ChartData> _dataPoints = [];
+  int _index;
 
-  // List<ChartData> get dataPoints => _dataPoints;
   COVID19Data get stats => _data;
   bool get hasData => _data != null;
-
+  int get selectedIndex => _index;
   static COVIDDataProvider of(BuildContext context, {bool listen = true}) =>
       Provider.of<COVIDDataProvider>(context, listen: listen);
+
+  void setIndex(index) {
+    _index = index;
+    notifyListeners();
+  }
 
   void setData(COVID19Data data) {
     _data = data;

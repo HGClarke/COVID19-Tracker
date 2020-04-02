@@ -1,9 +1,6 @@
-import 'dart:convert';
-
-import 'package:covid19_tracker/models/covid_data.dart';
-import 'package:covid19_tracker/models/stats_page_args.dart';
-import 'package:covid19_tracker/services/networking.dart';
-import 'package:covid19_tracker/utilities/api_service.dart';
+import 'package:covid19_tracker/models/breakdowns.dart';
+import 'package:covid19_tracker/models/data_provider.dart';
+import 'package:covid19_tracker/models/location.dart';
 import 'package:covid19_tracker/utilities/app_colors.dart';
 import 'package:covid19_tracker/widgets/pie_chart.dart';
 import 'package:flutter/material.dart';
@@ -16,43 +13,44 @@ class StatsPage extends StatefulWidget {
 }
 
 class _StatsPageState extends State<StatsPage> {
-  COVID19Data countryData;
+  Breakdowns countryData;
 
   @override
   void didChangeDependencies() {
-    if (countryData == null) {
-      _getCountryData();
-    }
+    _getCountryData();
     super.didChangeDependencies();
   }
 
   void _getCountryData() async {
-    final StatsPageArgs args = ModalRoute.of(context).settings.arguments;
-    final networkService = NetworkService(
-        APIService.baseDataURL + args.isoCode, APIService.covidStatsHeaders);
-
-    try {
-      final response = await networkService.fetchData();
-      var data = COVID19Data.fromJson(jsonDecode(response.body));
-
-      setState(() {
-        countryData = data;
-      });
-    } catch (e) {
-      print("Error $e");
+    final provider = COVIDDataProvider.of(context);
+    final allStats = provider.stats.stats;
+    if (provider.selectedIndex == -1) {
+      countryData = Breakdowns(
+        location: Location(countryOrRegion: 'Global'),
+        totalConfirmedCases: allStats.totalConfirmedCases,
+        totalRecoveredCases: allStats.totalRecoveredCases,
+        totalDeaths: allStats.totalDeaths,
+        newlyConfirmedCases: allStats.newlyConfirmedCases,
+        newlyRecoveredCases: allStats.newlyRecoveredCases,
+        newDeaths: allStats.newDeaths,
+      );
+    } else {
+      final countryStatsInfo =
+          provider.stats.stats.breakdowns[provider.selectedIndex];
+      countryData = countryStatsInfo;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final StatsPageArgs args = ModalRoute.of(context).settings.arguments;
+    final provider = COVIDDataProvider.of(context);
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         title: Text(
-          '${args.countryOrRegion}',
+          '${countryData.location.countryOrRegion}',
           style: Theme.of(context).textTheme.title.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
@@ -74,11 +72,11 @@ class _StatsPageState extends State<StatsPage> {
                   children: <Widget>[
                     Container(
                       height: 250,
-                      child: COVIDPieChart(countryData.stats),
+                      child: COVIDPieChart(countryData),
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Last updated ${DateFormat("dd, MMM yyyy hh:mm a").format(DateTime.parse(countryData.updatedDateTime))}',
+                      'Last updated ${DateFormat("dd, MMM yyyy hh:mm a").format(DateTime.parse(provider.stats.updatedDateTime))}',
                       style: Theme.of(context).textTheme.title.copyWith(
                             color: Colors.white,
                             fontSize: 16,
@@ -95,8 +93,8 @@ class _StatsPageState extends State<StatsPage> {
                               context,
                               "Confirmed",
                               AppColors.teal,
-                              countryData.stats.totalConfirmedCases,
-                              countryData.stats.newlyConfirmedCases,
+                              countryData.totalConfirmedCases,
+                              countryData.newlyConfirmedCases,
                             ),
                             SizedBox(
                               width: 30,
@@ -105,8 +103,8 @@ class _StatsPageState extends State<StatsPage> {
                               context,
                               "Recovered",
                               AppColors.salmon,
-                              countryData.stats.totalRecoveredCases,
-                              countryData.stats.newlyRecoveredCases,
+                              countryData.totalRecoveredCases,
+                              countryData.newlyRecoveredCases,
                             )
                           ],
                         ),
@@ -119,8 +117,8 @@ class _StatsPageState extends State<StatsPage> {
                               context,
                               "Deaths",
                               AppColors.yellow,
-                              countryData.stats.totalDeaths,
-                              countryData.stats.newDeaths,
+                              countryData.totalDeaths,
+                              countryData.newDeaths,
                             ),
                             SizedBox(
                               width: 30,
@@ -129,12 +127,12 @@ class _StatsPageState extends State<StatsPage> {
                               context,
                               "Total",
                               AppColors.eggWhite,
-                              countryData.stats.totalConfirmedCases +
-                                  countryData.stats.totalDeaths +
-                                  countryData.stats.totalRecoveredCases,
-                              countryData.stats.newlyRecoveredCases +
-                                  countryData.stats.newDeaths +
-                                  countryData.stats.newlyConfirmedCases,
+                              countryData.totalConfirmedCases +
+                                  countryData.totalDeaths +
+                                  countryData.totalRecoveredCases,
+                              countryData.newlyRecoveredCases +
+                                  countryData.newDeaths +
+                                  countryData.newlyConfirmedCases,
                             )
                           ],
                         )

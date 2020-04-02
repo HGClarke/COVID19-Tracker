@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:covid19_tracker/models/covid_data.dart';
 import 'package:covid19_tracker/models/data_provider.dart';
-import 'package:covid19_tracker/models/stats_page_args.dart';
+
 import 'package:covid19_tracker/services/networking.dart';
 import 'package:covid19_tracker/utilities/api_service.dart';
 import 'package:covid19_tracker/utilities/app_colors.dart';
@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                       title: "Global Stats",
                       subtitle: "See global COVID-19 Data",
                       route: PageRoutes.globalStatsPage,
-                      args: StatsPageArgs('Global', 'global'),
+                      // args: StatsPageArgs('Global', 'global'),
                     ),
                     SizedBox(
                       height: 10,
@@ -167,6 +167,7 @@ class HomePageCard extends StatelessWidget {
         Expanded(
           child: InkWell(
             onTap: () {
+              COVIDDataProvider.of(context, listen: false).setIndex(-1);
               Navigator.pushNamed(context, route, arguments: args);
             },
             child: Container(
@@ -174,7 +175,9 @@ class HomePageCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.black26,
                 borderRadius: BorderRadius.all(
-                  Radius.circular(5.0),
+                  Radius.circular(
+                    5.0,
+                  ),
                 ),
               ),
               child: Column(

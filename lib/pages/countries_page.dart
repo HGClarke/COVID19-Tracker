@@ -1,6 +1,5 @@
 import 'package:covid19_tracker/models/breakdowns.dart';
 import 'package:covid19_tracker/models/data_provider.dart';
-import 'package:covid19_tracker/models/stats_page_args.dart';
 import 'package:covid19_tracker/utilities/app_colors.dart';
 import 'package:covid19_tracker/utilities/page_routes.dart';
 
@@ -18,18 +17,13 @@ class _CountriesPageState extends State<CountriesPage> {
 
   @override
   void didChangeDependencies() {
-    if (breakdowns == null) {
-      breakdowns = COVIDDataProvider.of(context)
-          .stats
-          .stats
-          .breakdowns
-          .where((v) =>
-              v.location.lat != null &&
-              v.location.long != null &&
-              v.location.isoCode != null)
-          .toList();
+    if (COVIDDataProvider.of(context).hasData) {
+      breakdowns =
+          COVIDDataProvider.of(context).stats.stats.breakdowns.toList();
       setState(() {
         _filteredBreakdowns = breakdowns;
+        _filteredBreakdowns
+            .sort((a, b) => b.totalDeaths.compareTo(a.totalDeaths));
       });
     }
 
@@ -37,21 +31,7 @@ class _CountriesPageState extends State<CountriesPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // var _filteredBreakdowns = COVIDDataProvider.of(context)
-    //     .stats
-    //     .stats
-    //     .breakdowns
-    //     .where((v) =>
-    //         v.location.lat != null &&
-    //         v.location.long != null &&
-    //         v.location.isoCode != null)
-    //     .toList();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -90,13 +70,9 @@ class _CountriesPageState extends State<CountriesPage> {
                       setState(
                         () {
                           _filteredBreakdowns = breakdowns
-                              .where((v) =>
-                                  v.location.lat != null &&
-                                  v.location.long != null &&
-                                  v.location.isoCode != null &&
-                                  v.location.countryOrRegion
-                                      .toLowerCase()
-                                      .contains(text.trim().toLowerCase()))
+                              .where((v) => v.location.countryOrRegion
+                                  .toLowerCase()
+                                  .contains(text.trim().toLowerCase()))
                               .toList();
                         },
                       );
@@ -110,12 +86,15 @@ class _CountriesPageState extends State<CountriesPage> {
 
                         return GestureDetector(
                           onTap: () {
+                            final provider =
+                                COVIDDataProvider.of(context, listen: false);
+
+                            final actualIndex = provider.stats.stats.breakdowns
+                                .indexOf(breakdown);
+                            provider.setIndex(actualIndex);
                             Navigator.pushNamed(
                               context,
                               PageRoutes.statsPage,
-                              arguments: StatsPageArgs(
-                                  breakdown.location.countryOrRegion,
-                                  breakdown.location.isoCode),
                             );
                           },
                           child: Container(
